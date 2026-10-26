@@ -1,0 +1,13 @@
+# R session and workspace files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+
+# Quarto generated files and caches
+/.quarto/
+_site/
+*_files/
+*_cache/
+*.html

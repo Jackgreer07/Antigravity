@@ -1,0 +1,55 @@
+---
+title: "Exploring Storms"
+author: "Jackgreer07"
+execute:
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+library(tidyverse)
+```
+
+```{r}
+storms |>
+  filter(status %in% c("tropical depression", "tropical storm", "hurricane")) |>
+  mutate(status = factor(status, levels = c("tropical depression", "tropical storm", "hurricane"))) |>
+  group_by(year, status) |>
+  summarise(named_storms = n_distinct(name), .groups = "drop") |>
+  ggplot(aes(x = year, y = named_storms, fill = status)) +
+  geom_area() +
+  scale_fill_manual(
+    values = c(
+      "tropical depression" = "lightblue",
+      "tropical storm" = "orange",
+      "hurricane" = "darkred"
+    )
+  ) +
+  labs(
+    title = "Named storms per year by storm type",
+    x = "Year",
+    y = "Number of named storms",
+    fill = "Storm Status"
+  )
+```
+
+```{r}
+#| cache: true
+storms_recent <- storms |>
+  filter(year >= 2000) |>
+  select(year, name, status, wind, pressure)
+```
+
+```{r}
+storms_recent |>
+  ggplot(aes(x = wind, y = pressure, color = status)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Atmospheric Pressure vs. Wind Speed in Recent Storms",
+    subtitle = "Stronger wind speeds are associated with lower atmospheric pressure (2000–present)",
+    x = "Wind Speed (knots)",
+    y = "Atmospheric Pressure (millibars)",
+    color = "Storm Status"
+  )
+```
